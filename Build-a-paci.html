@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build-a-paci</title>
+    <style>
+        body {
+			display: flex;
+			justify-content: center;
+			background-color: #9b9b9b;
+        }
+		
+		.container {
+			width: 90vw;
+            display: flex;
+            gap: 20px; /* Space between columns */
+			margin-bottom: 5px;
+        }
+		
+		.column-image {
+            flex: 0; /* Adjusts to content size */
+            background-color: #d0d0d0;
+            white-space: nowrap;
+            padding: 20px;
+            height: 100%;
+        }
+		
+		.column-menu {
+            flex: 1; /* Takes remaining space */
+            background-color: #f0f0f0;
+            padding: 20px;
+            height: 100%;
+        }
+		
+		.image-container {
+			position: relative;
+			width: 50vw;
+			height: 75vh;
+			background:
+				radial-gradient(ellipse, rgba(0, 0, 0, 0.6), rgba(255, 255, 255, 0)),
+				#607C8E;
+            border: 1px solid black;
+			overflow: hidden;
+		}
+		
+		.paci-image {
+			position: absolute;
+			height: 100%;
+			top: 55%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
+		
+		/* Button Styling */
+        .rounded-button {
+            width: 100px;
+            height: 100px;
+            border-radius: 20px;
+			overflow: hidden;
+            border: 1px solid black;
+			padding: 0;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+			margin-bottom: 3px;
+			text-align: center;
+			line-height: 35px;
+        }
+
+        .rounded-button img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+			border-radius: 20px;
+        }
+
+        .rounded-button:hover {
+            transform: scale(1.02);
+        }
+		
+		.button-container {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 4px;
+		}
+		
+		.button-wrapper {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			text-align: center;
+		}
+		
+		.order-text {
+			background-color: white;
+			padding: 5px;
+			tab-size: 8;
+			text-align: center;
+		}
+		
+		.custom-text {
+			font-family: verdana;
+			font-size: 2em;
+			font-weight: 700;
+			color: #f5f5f5;
+			text-shadow: -2px -2px grey;
+			position: absolute;
+			top: 52.3%;
+			left: 50%;
+			transform: translate(-27%, -50%) rotate(-18deg);
+			z-index: 4;
+		}
+    </style>
+</head>
+<body>
+	<div class="container">
+		<div class="column-image">
+			<h1 style="margin-bottom: 0px">FURSUIT BUILD-A-PACI</h1>
+			<p style="margin-top: 0px">by Charis - Feb 2025</p>
+			<div class="image-container">
+				<img class="paci-image" id="paci_teat" src="teat-colors\teat_Azure_Blue.png" style="z-index: 1;">
+				<img class="paci-image" id="paci_button" src="button-colors\button_Azure_Blue.png" style="z-index: 2;">
+				<img class="paci-image" id="paci_ring" src="ring-colors\ring_Azure_Blue.png" style="z-index: 2;">
+				<img class="paci-image" id="paci_shield" src="classic-colors\classic_Azure_Blue.png" style="z-index: 2;">
+				<img class="paci-image" id="paci_design" src="" style="z-index: 3;">
+				<div style="height: 100%; width: 100%; display: flex; justify-content: center; align-items: center;">
+					<span class="custom-text" id="paci_text" contenteditable="true" oninput="adjustFontSize()"><i>TEXT</i></span>
+				</div>
+			</div>
+<pre class="order-text" id="order_text">
+
+Teat:			<i>({{teatcolor}})</i>
+Shield: ({{shield}})	<i>({{shieldcolor}})</i>
+Button:			<i>({{buttoncolor}})</i>
+- Design: ({{design}})	<i>({{designcolor}})</i>
+Ring:			<i>({{ringcolor}})</i>
+
+<b>Total:	20.00€</b>
+<i>Paypal: 21.03€ (domestic/EØS: 3.4%+0.35€)</i>
+<i>Paypal: 21.43€ (outside EØS: 5.4%+0.35€) </i>
+
+</pre>
+		</div>
+		<div class="column-menu">
+			<div class="button-container">
+				<div class="rounded-button" id="Teat" onclick="changeTab('Teat')" style="width: 98px; height: 35px; background-color: grey;"><b>Teat</b></div>
+				<div class="rounded-button" id="Shield" onclick="changeTab('Shield')" style="width: 98px; height: 35px;"><b>Shield</b></div>
+				<div class="rounded-button" id="Button" onclick="changeTab('Button')" style="width: 98px; height: 35px;"><b>Button</b></div>
+				<div class="rounded-button" id="Ring" onclick="changeTab('Ring')" style="width: 98px; height: 35px;"><b>Ring</b></div>
+			</div>
+			<div id="paci_shield_group">
+				<h2 style="background-color: black; color: white; padding: 5px; text-align: center;">Shield Design</h2>
+				<div class="button-container">
+					<div class="button-wrapper">
+						<button class="rounded-button" onclick="changeShield('classic')">
+							<img src="classic-colors/classic.png">
+						</button>
+						<span>Classic</span>
+					</div>
+					<div class="button-wrapper">
+						<button class="rounded-button" onclick="changeShield('butterfly')">
+							<img src="butterfly-colors/butterfly.png">
+						</button>
+						<span>Butterfly</span>
+					</div>
+				</div>
+			</div>
+			<h2 id="menu_text" style="background-color: black; color: white; padding: 5px; text-align: center;">Teat Color</h2>
+			<div class="button-container">
+				<div class="button-wrapper">
+					<button class="rounded-button" onclick="changeColor('Azure_Blue')">
+						<img src="filament-colors\color_PLA_Azure_Blue.png">
+					</button>
+					<span>Azure Blue</span>
+				</div>
+				<div class="button-wrapper">
+					<button class="rounded-button" onclick="changeColor('Dark_Wood')">
+						<img src="filament-colors\color_PLA_Dark_Wood.png">
+					</button>
+					<span>Dark Wood</span>
+				</div>
+				<div class="button-wrapper">
+					<button class="rounded-button" onclick="changeColor('Galaxy_Black')">
+						<img src="filament-colors\color_PLA_Galaxy_Black.png">
+					</button>
+					<span>Galaxy Black</span>
+				</div>
+				<div class="button-wrapper">
+					<button class="rounded-button" onclick="changeColor('Green_Fluorescent')">
+						<img src="filament-colors\color_PLA_Green_Fluorescent.png">
+					</button>
+					<span>Green Fluores.</span>
+				</div>
+				<div class="button-wrapper">
+					<button class="rounded-button" onclick="changeColor('Lime_Green')">
+						<img src="filament-colors\color_PLA_Lime_Green.png">
+					</button>
+					<span>Lime Green</span>
+				</div>
+				<div class="button-wrapper">
+					<button class="rounded-button" onclick="changeColor('Lipstick_Red')">
+						<img src="filament-colors\color_PLA_Lipstick_Red.png">
+					</button>
+					<span>Lipstick Red</span>
+				</div>
+				<div class="button-wrapper">
+					<button class="rounded-button" onclick="changeColor('Metallic_Copper_Red')">
+						<img src="filament-colors\color_PLA_Metallic_Copper_Red.png">
+					</button>
+					<span>Copper Red</span>
+				</div>
+				<div class="button-wrapper">
+					<button class="rounded-button" onclick="changeColor('Ms_Pink')">
+						<img src="filament-colors\color_PLA_Ms_Pink.png">
+					</button>
+					<span>Ms. Pink</span>
+				</div>
+				<div class="button-wrapper">
+					<button class="rounded-button" onclick="changeColor('Mystic_Brown')">
+						<img src="filament-colors\color_PLA_Mystic_Brown.png">
+					</button>
+					<span>Mystic Brown</span>
+				</div>
+				<div class="button-wrapper">
+					<button class="rounded-button" onclick="changeColor('Opal_Green')">
+						<img src="filament-colors\color_PLA_Opal_Green.png">
+					</button>
+					<span>Opal Green</span>
+				</div>
+				<div class="button-wrapper">
+					<button class="rounded-button" onclick="changeColor('Pineapple_Yellow')">
+						<img src="filament-colors\color_PLA_Pineapple_Yellow.png">
+					</button>
+					<span>Pineap. Yellow</span>
+				</div>
+				<div class="button-wrapper">
+					<button class="rounded-button" onclick="changeColor('Purple')">
+						<img src="filament-colors\color_PLA_Purple.png">
+					</button>
+					<span>Purple</span>
+				</div>
+				<div class="button-wrapper">
+					<button class="rounded-button" onclick="changeColor('Pristine_White')">
+						<img src="filament-colors\color_PLA_Pristine_White.png">
+					</button>
+					<span>Pristine White</span>
+				</div>
+				<div class="button-wrapper">
+					<button class="rounded-button" onclick="changeColor('Vanilla_White')">
+						<img src="filament-colors\color_PLA_Vanilla_White.png">
+					</button>
+					<span>Vanilla White</span>
+				</div>
+				<div class="button-wrapper">
+					<button class="rounded-button" onclick="changeColor('Royal_Blue')">
+						<img src="filament-colors\color_PLA_Royal_Blue.png">
+					</button>
+					<span>Royal Blue</span>
+				</div>
+				<div class="button-wrapper">
+					<button class="rounded-button" onclick="changeColor('Sunrise_Yellow')">
+						<img src="filament-colors\color_PLA_Sunrise_Yellow.png">
+					</button>
+					<span>Sunrise Yellow</span>
+				</div>
+				<div class="button-wrapper">
+					<button class="rounded-button" onclick="changeColor('Terminator_Grey')">
+						<img src="filament-colors\color_PLA_Terminator_Grey.png">
+					</button>
+					<span>Terminat. Grey</span>
+				</div>
+				<div class="button-wrapper">
+					<button class="rounded-button" onclick="changeColor('True_Orange')">
+						<img src="filament-colors\color_PLA_True_Orange.png">
+					</button>
+					<span>True Orange</span>
+				</div>
+				<div class="button-wrapper">
+					<button class="rounded-button" onclick="changeColor('Silky_Rainbow')">
+						<img src="filament-colors\color_PLA_Silky_Rainbow.png">
+					</button>
+					<span>Silky Rainbow</span>
+				</div>
+			</div>
+			<div id="paci_button_group">
+				<h2 style="background-color: black; color: white; padding: 5px; text-align: center;">Button Design</h2>
+				<div class="button-container">
+					<div class="button-wrapper">
+						<button class="rounded-button" onclick="changeDesign('	')">
+						</button>
+						<span>Blank</span>
+					</div>
+					<div class="button-wrapper">
+						<button class="rounded-button" onclick="changeDesign('paw')">
+							<img src="design-colors/paw/design_paw_Azure_Blue.png" style="transform: scale(7) translate(-2.4px, 2.8px);">
+						</button>
+						<span>Paw</span>
+					</div>
+					<div class="button-wrapper">
+						<button class="rounded-button" onclick="changeDesign('heart')">
+							<img src="design-colors/heart/design_heart_Azure_Blue.png" style="transform: scale(7) translate(-2.3px, 2.8px);">
+						</button>
+						<span>Heart</span>
+					</div>
+					<div class="button-wrapper">
+						<button class="rounded-button" onclick="changeDesign('butterfly')">
+							<img src="design-colors/butterfly/design_butterfly_Azure_Blue.png" style="transform: scale(7) translate(-2.3px, 2.6px);">
+						</button>
+						<span>butterfly</span>
+					</div>
+					<div class="button-wrapper">
+						<button class="rounded-button" onclick="changeDesign('baby')">
+							<img src="design-colors/baby/design_baby_Azure_Blue.png" style="transform: scale(7) translate(-2px, 3px);">
+						</button>
+						<span>Baby</span>
+					</div>
+					<div class="button-wrapper">
+						<button class="rounded-button" onclick="changeDesign('text')" style="overflow: visible;">
+							<span style="color: #0d5d85; font-family: verdana; font-size: 2em; font-weight: 700; text-shadow: -2px -2px grey; display: inline-block; transform: translate(0%, 10%) rotate(-18deg);"><i>TEXT</i></span>
+						</button>
+						<span>Custom Text</span>
+					</div>
+				</div>
+				<h2 style="background-color: black; color: white; padding: 5px; text-align: center;">Design Color</h2>
+				<div class="button-container">
+					<div class="button-wrapper">
+						<button class="rounded-button" onclick="changeDesignColor('Azure_Blue')">
+							<img src="filament-colors\color_PLA_Azure_Blue.png">
+						</button>
+						<span>Azure Blue</span>
+					</div>
+					<div class="button-wrapper">
+						<button class="rounded-button" onclick="changeDesignColor('Dark_Wood')">
+							<img src="filament-colors\color_PLA_Dark_Wood.png">
+						</button>
+						<span>Dark Wood</span>
+					</div>
+					<div class="button-wrapper">
+						<button class="rounded-button" onclick="changeDesignColor('Galaxy_Black')">
+							<img src="filament-colors\color_PLA_Galaxy_Black.png">
+						</button>
+						<span>Galaxy Black</span>
+					</div>
+					<div class="button-wrapper">
+						<button class="rounded-button" onclick="changeDesignColor('Green_Fluorescent')">
+							<img src="filament-colors\color_PLA_Green_Fluorescent.png">
+						</button>
+						<span>Green Fluores.</span>
+					</div>
+					<div class="button-wrapper">
+						<button class="rounded-button" onclick="changeDesignColor('Lime_Green')">
+							<img src="filament-colors\color_PLA_Lime_Green.png">
+						</button>
+						<span>Lime Green</span>
+					</div>
+					<div class="button-wrapper">
+						<button class="rounded-button" onclick="changeDesignColor('Lipstick_Red')">
+							<img src="filament-colors\color_PLA_Lipstick_Red.png">
+						</button>
+						<span>Lipstick Red</span>
+					</div>
+					<div class="button-wrapper">
+						<button class="rounded-button" onclick="changeDesignColor('Metallic_Copper_Red')">
+							<img src="filament-colors\color_PLA_Metallic_Copper_Red.png">
+						</button>
+						<span>Copper Red</span>
+					</div>
+					<div class="button-wrapper">
+						<button class="rounded-button" onclick="changeDesignColor('Ms_Pink')">
+							<img src="filament-colors\color_PLA_Ms_Pink.png">
+						</button>
+						<span>Ms. Pink</span>
+					</div>
+					<div class="button-wrapper">
+						<button class="rounded-button" onclick="changeDesignColor('Mystic_Brown')">
+							<img src="filament-colors\color_PLA_Mystic_Brown.png">
+						</button>
+						<span>Mystic Brown</span>
+					</div>
+					<div class="button-wrapper">
+						<button class="rounded-button" onclick="changeDesignColor('Opal_Green')">
+							<img src="filament-colors\color_PLA_Opal_Green.png">
+						</button>
+						<span>Opal Green</span>
+					</div>
+					<div class="button-wrapper">
+						<button class="rounded-button" onclick="changeDesignColor('Pineapple_Yellow')">
+							<img src="filament-colors\color_PLA_Pineapple_Yellow.png">
+						</button>
+						<span>Pineap. Yellow</span>
+					</div>
+					<div class="button-wrapper">
+						<button class="rounded-button" onclick="changeDesignColor('Purple')">
+							<img src="filament-colors\color_PLA_Purple.png">
+						</button>
+						<span>Purple</span>
+					</div>
+					<div class="button-wrapper">
+						<button class="rounded-button" onclick="changeDesignColor('Pristine_White')">
+							<img src="filament-colors\color_PLA_Pristine_White.png">
+						</button>
+						<span>Pristine White</span>
+					</div>
+					<div class="button-wrapper">
+						<button class="rounded-button" onclick="changeDesignColor('Vanilla_White')">
+							<img src="filament-colors\color_PLA_Vanilla_White.png">
+						</button>
+						<span>Vanilla White</span>
+					</div>
+					<div class="button-wrapper">
+						<button class="rounded-button" onclick="changeDesignColor('Royal_Blue')">
+							<img src="filament-colors\color_PLA_Royal_Blue.png">
+						</button>
+						<span>Royal Blue</span>
+					</div>
+					<div class="button-wrapper">
+						<button class="rounded-button" onclick="changeDesignColor('Sunrise_Yellow')">
+							<img src="filament-colors\color_PLA_Sunrise_Yellow.png">
+						</button>
+						<span>Sunrise Yellow</span>
+					</div>
+					<div class="button-wrapper">
+						<button class="rounded-button" onclick="changeDesignColor('Terminator_Grey')">
+							<img src="filament-colors\color_PLA_Terminator_Grey.png">
+						</button>
+						<span>Terminat. Grey</span>
+					</div>
+					<div class="button-wrapper">
+						<button class="rounded-button" onclick="changeDesignColor('True_Orange')">
+							<img src="filament-colors\color_PLA_True_Orange.png">
+						</button>
+						<span>True Orange</span>
+					</div>
+					<div class="button-wrapper">
+						<button class="rounded-button" onclick="changeDesignColor('Silky_Rainbow')">
+							<img src="filament-colors\color_PLA_Silky_Rainbow.png">
+						</button>
+						<span>Silky Rainbow</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <script>
+		document.getElementById("paci_button_group").style.display = "none";
+		document.getElementById("paci_shield_group").style.display = "none";
+		document.getElementById("paci_text").style.display = "none";
+		const teatTab = document.getElementById("Teat");
+		const shieldTab = document.getElementById("Shield");
+		const buttonTab = document.getElementById("Button");
+		const ringTab = document.getElementById("Ring");
+		var teatColor = "Azure_Blue";
+		var shieldColor = "Azure_Blue";
+		var buttonColor = "Azure_Blue";
+		var ringColor = "Azure_Blue";
+		
+		function changeColor(newColor) {
+			if (teatTab.style.backgroundColor == "grey") {
+				teatColor = newColor;
+				document.getElementById("paci_teat").src = "teat-colors/teat_" + newColor + ".png";
+			}
+			if (shieldTab.style.backgroundColor == "grey") {
+				shieldColor = newColor;
+				document.getElementById("paci_shield").src = shield + "-colors/" + shield + "_" + shieldColor + ".png";
+			}
+			if (buttonTab.style.backgroundColor == "grey") {
+				buttonColor = newColor;
+				document.getElementById("paci_button").src = "button-colors/button_" + newColor + ".png";
+			}
+			if (ringTab.style.backgroundColor == "grey") {
+				ringColor = newColor;
+				document.getElementById("paci_ring").src = "ring-colors/ring_" + newColor + ".png";
+			}
+			updateOrder();
+        }
+		
+		function changeTab(src) {
+			teatTab.style.backgroundColor = "white";
+			shieldTab.style.backgroundColor = "white";
+			buttonTab.style.backgroundColor = "white";
+			ringTab.style.backgroundColor = "white";
+			document.getElementById(src).style.backgroundColor = "grey";
+			
+			document.getElementById("menu_text").innerHTML = src + " Color";
+			
+			if (src == "Shield") {
+				document.getElementById("paci_shield_group").style.display = "block";
+			} else {
+				document.getElementById("paci_shield_group").style.display = "none";
+			}
+			
+			if (src == "Button") {
+				document.getElementById("paci_button_group").style.display = "block";
+			} else {
+				document.getElementById("paci_button_group").style.display = "none";
+			}
+			updateOrder();
+		}
+		
+		var shield = "classic";
+		
+		function changeShield(newShield) {
+			shield = newShield;
+			document.getElementById("paci_shield").src = shield + "-colors/" + shield + "_" + shieldColor + ".png";
+			updateOrder();
+        }
+		
+		var design = "	";
+		var designColor = "Azure_Blue";
+		const colorMap = {
+			"Azure_Blue": "#2EA8E5",
+			"Dark_Wood": "#5A3922",
+			"Galaxy_Black": "#2E2E2E",
+			"Green_Fluorescent": "#02B148",
+			"Lime_Green": "#C2DC3C",
+			"Lipstick_Red": "#E54A39",
+			"Metallic_Copper_Red": "#7F3E15",
+			"Ms_Pink": "#EB57D6",
+			"Mystic_Brown": "#521E1B",
+			"Opal_Green": "#08533F",
+			"Pineapple_Yellow": "#F3EA14",
+			"Pristine_White": "#E7E7E7",
+			"Purple": "#A95FC6",
+			"Royal_Blue": "#3162AE",
+			"Silky_Rainbow": "#3B4D3E",
+			"Sunrise_Yellow": "#C9C26C",
+			"Terminator_Grey": "#A7A7A7",
+			"True_Orange": "#ECA613",
+			"Vanilla_White": "#E5E1D7"
+		};
+		
+		function changeDesign(newDesign) {
+			design = newDesign;
+			if (design == "text") {
+				document.getElementById("paci_text").style.color = colorMap[designColor] || "#000000";
+				document.getElementById("paci_text").style.display = "block";
+			} else {
+				document.getElementById("paci_text").style.display = "none";
+			}
+			if (design != "	" && design != "text") {
+				document.getElementById("paci_design").src = "design-colors/" + design + "/design_" + design + "_" + designColor + ".png";
+			} else {
+				document.getElementById("paci_design").src = "";
+			}
+			updateOrder();
+        }
+		
+		function changeDesignColor(newColor) {
+			designColor = newColor;
+			if (design == "text") {
+				document.getElementById("paci_text").style.color = colorMap[designColor] || "#000000";
+				document.getElementById("paci_text").style.display = "block";
+			} else {
+				document.getElementById("paci_text").style.display = "none";
+			}
+			if (design != "	" && design != "text") {
+				document.getElementById("paci_design").src = "design-colors/" + design + "/design_" + design + "_" + designColor + ".png";
+			}
+			updateOrder();
+        }
+		
+		const orderText = document.getElementById("order_text");
+		const regexContent = orderText.innerHTML;
+		updateOrder();
+		
+		function updateOrder() {
+			content = regexContent;
+			// Replace placeholders with actual values
+			var regex = new RegExp(`{{teatcolor}}`, 'g'); // Create a dynamic regex for the placeholder
+			content = content.replace(regex, teatColor);
+			regex = new RegExp(`{{shieldcolor}}`, 'g');
+			content = content.replace(regex, shieldColor);
+			regex = new RegExp(`{{buttoncolor}}`, 'g');
+			content = content.replace(regex, buttonColor);
+			regex = new RegExp(`{{designcolor}}`, 'g');
+			content = content.replace(regex, designColor);
+			regex = new RegExp(`{{ringcolor}}`, 'g');
+			content = content.replace(regex, ringColor);
+			
+			regex = new RegExp(`{{shield}}`, 'g');
+			content = content.replace(regex, shield);
+			regex = new RegExp(`{{design}}`, 'g');
+			content = content.replace(regex, design);			
+			
+			orderText.innerHTML = content;
+		}
+		
+		function adjustFontSize() {
+			let input = document.getElementById("paci_text");
+			let maxFontSize = 40;  // Maximum font size (px)
+			let minFontSize = 15;  // Minimum font size (px)
+			let maxChars = 10;     // Number of characters before shrinking
+
+			let length = input.textContent.length;
+			let newSize = maxFontSize - (length / maxChars) * (maxFontSize - minFontSize);
+
+			input.style.fontSize = Math.max(minFontSize, newSize) + "px";
+		}
+    </script>
+</body>
+</html>
