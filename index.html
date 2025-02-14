@@ -151,6 +151,23 @@ Ring:			<i>({{ringcolor}})</i>
 				<div class="rounded-button" id="Button" onclick="changeTab('Button')" style="width: 98px; height: 35px;"><b>Button</b></div>
 				<div class="rounded-button" id="Ring" onclick="changeTab('Ring')" style="width: 98px; height: 35px;"><b>Ring</b></div>
 			</div>
+			<div id="paci_teat_group">
+				<h2 style="background-color: black; color: white; padding: 5px; text-align: center;">Teat Design</h2>
+				<div class="button-container">
+					<div class="button-wrapper">
+						<button class="rounded-button" onclick="changeTeat('teat')">
+							<img src="teat-colors/teat.png" style="transform: scale(0.8) translate(4px, 0px);">
+						</button>
+						<span>Standard</span>
+					</div>
+					<div class="button-wrapper">
+						<button class="rounded-button" onclick="changeTeat('smallteat')">
+							<img src="smallteat-colors/smallteat.png" style="transform: scale(0.72) translate(0px, 6px);">
+						</button>
+						<span>Small</span>
+					</div>
+				</div>
+			</div>
 			<div id="paci_shield_group">
 				<h2 style="background-color: black; color: white; padding: 5px; text-align: center;">Shield Design</h2>
 				<div class="button-container">
@@ -467,7 +484,7 @@ Ring:			<i>({{ringcolor}})</i>
 		function changeColor(newColor) {
 			if (teatTab.style.backgroundColor == "grey") {
 				teatColor = newColor;
-				document.getElementById("paci_teat").src = "teat-colors/teat_" + newColor + ".png";
+				document.getElementById("paci_teat").src = teat + "-colors/" + teat + "_" + teatColor + ".png";
 			}
 			if (shieldTab.style.backgroundColor == "grey") {
 				shieldColor = newColor;
@@ -493,6 +510,12 @@ Ring:			<i>({{ringcolor}})</i>
 			
 			document.getElementById("menu_text").innerHTML = src + " Color";
 			
+			if (src == "Teat") {
+				document.getElementById("paci_teat_group").style.display = "block";
+			} else {
+				document.getElementById("paci_teat_group").style.display = "none";
+			}
+			
 			if (src == "Shield") {
 				document.getElementById("paci_shield_group").style.display = "block";
 			} else {
@@ -506,6 +529,14 @@ Ring:			<i>({{ringcolor}})</i>
 			}
 			updateOrder();
 		}
+		
+		var teat = "teat";
+		
+		function changeTeat(newTeat) {
+			teat = newTeat;
+			document.getElementById("paci_teat").src = teat + "-colors/" + teat + "_" + teatColor + ".png";
+			updateOrder();
+        }
 		
 		var shield = "classic";
 		
